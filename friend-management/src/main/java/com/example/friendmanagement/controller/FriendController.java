@@ -6,16 +6,22 @@ import com.example.friendmanagement.api.request.GetCommonFriendsRequest;
 import com.example.friendmanagement.api.response.CreateOneFriendResponse;
 import com.example.friendmanagement.api.response.GetAllFriendsResponse;
 import com.example.friendmanagement.api.response.GetCommonFriendsResponse;
+import com.example.friendmanagement.error.GetAllFriendsException;
 import com.example.friendmanagement.model.FriendEntity;
 import com.example.friendmanagement.service.FriendService;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/api/friend")
 public class FriendController {
 
@@ -28,73 +34,17 @@ public class FriendController {
     }
 
     @PostMapping("/create-one")
-    private Mono<CreateOneFriendResponse> createOneFriend(@RequestBody CreateOneFriendRequest createOneFriendRequest) {
-        CreateOneFriendResponse createOneFriendResponse = new CreateOneFriendResponse();
-        try {
-            if (createOneFriendRequest == null || createOneFriendRequest.getFriends() == null || createOneFriendRequest.getFriends().length > 2 || createOneFriendRequest.getFriends()[0].equals(createOneFriendRequest.getFriends()[1])) {
-                createOneFriendResponse.setSuccess(false);
-                return Mono.just(createOneFriendResponse);
-            }
-            String email1, email2;
-            if (createOneFriendRequest.getFriends()[0].compareTo(createOneFriendRequest.getFriends()[1]) < 0) {
-                email1 = createOneFriendRequest.getFriends()[0];
-                email2 = createOneFriendRequest.getFriends()[1];
-            } else {
-                email1 = createOneFriendRequest.getFriends()[1];
-                email2 = createOneFriendRequest.getFriends()[0];
-            }
-            Mono<FriendEntity> friendEntityAsMono = friendService.createOne(new FriendEntity(email1, email2));
-            FriendEntity friendEntity = friendEntityAsMono.block();
-            createOneFriendResponse.setSuccess(true);
-        } catch (Exception e) {
-            createOneFriendResponse.setSuccess(false);
-        }
-        return Mono.just(createOneFriendResponse);
+    private Mono<CreateOneFriendResponse> createOneFriend(@RequestBody @NonNull CreateOneFriendRequest createOneFriendRequest) {
+        return friendService.createOneFriend(createOneFriendRequest);
     }
 
     @PostMapping("/get-all-by-email")
-    private Flux<GetAllFriendsResponse> getAllFriendsByEmail(@RequestBody GetAllFriendsRequest getAllFriendsRequest) {
-        GetAllFriendsResponse getAllFriendsResponse = new GetAllFriendsResponse();
-        try {
-            if (getAllFriendsRequest == null || getAllFriendsRequest.getEmail() == null) {
-                getAllFriendsResponse.setFriends(null);
-                getAllFriendsResponse.setCount(0);
-                getAllFriendsResponse.setSuccess(false);
-            } else {
-                Flux<String> emailEntitiesAsFlux = friendService.getAllByEmail(getAllFriendsRequest.getEmail());
-                List<String> emailEntities = emailEntitiesAsFlux.collectList().block();
-                getAllFriendsResponse.setFriends(emailEntities);
-                getAllFriendsResponse.setCount(emailEntities.size());
-                getAllFriendsResponse.setSuccess(true);
-            }
-        } catch (Exception e) {
-            getAllFriendsResponse.setFriends(null);
-            getAllFriendsResponse.setCount(0);
-            getAllFriendsResponse.setSuccess(false);
-        }
-        return Flux.just(getAllFriendsResponse);
+    private Mono<GetAllFriendsResponse> getAllFriendsByEmail(@RequestBody @NonNull GetAllFriendsRequest getAllFriendsRequest) throws Exception {
+        return friendService.getAllFriendsByEmail(getAllFriendsRequest);
     }
 
     @PostMapping("/get-common-friends")
-    private Flux<GetCommonFriendsResponse> getCommonFriends(@RequestBody GetCommonFriendsRequest getCommonFriendsRequest) {
-        GetCommonFriendsResponse getCommonFriendsResponse = new GetCommonFriendsResponse();
-        try {
-            if (getCommonFriendsRequest == null || getCommonFriendsRequest.getFriends() == null || getCommonFriendsRequest.getFriends().length > 2) {
-                getCommonFriendsResponse.setFriends(null);
-                getCommonFriendsResponse.setCount(0);
-                getCommonFriendsResponse.setSuccess(false);
-            } else {
-                Flux<String> emailEntitiesAsFlux = friendService.getCommon(getCommonFriendsRequest.getFriends()[0], getCommonFriendsRequest.getFriends()[1]);
-                List<String> emailEntities = emailEntitiesAsFlux.collectList().block();
-                getCommonFriendsResponse.setFriends(emailEntities);
-                getCommonFriendsResponse.setCount(emailEntities.size());
-                getCommonFriendsResponse.setSuccess(true);
-            }
-        } catch (Exception e) {
-            getCommonFriendsResponse.setFriends(null);
-            getCommonFriendsResponse.setCount(0);
-            getCommonFriendsResponse.setSuccess(false);
-        }
-        return Flux.just(getCommonFriendsResponse);
+    private Mono<GetCommonFriendsResponse> getCommonFriends(@RequestBody @NonNull GetCommonFriendsRequest getCommonFriendsRequest) {
+        return friendService.getCommonFriends(getCommonFriendsRequest);
     }
 }

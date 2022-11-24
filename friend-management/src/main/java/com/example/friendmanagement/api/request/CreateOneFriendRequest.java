@@ -1,15 +1,15 @@
 package com.example.friendmanagement.api.request;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateOneFriendRequest {
     private String[] friends;
-
-    public String[] getFriends() {
-        return friends;
-    }
-
-    public void setFriends(String[] friends) {
-        this.friends = friends;
-    }
 }
