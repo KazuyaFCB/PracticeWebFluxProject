@@ -6,6 +6,9 @@ import com.example.friendmanagement.api.request.GetCommonFriendsRequest;
 import com.example.friendmanagement.api.response.CreateOneFriendResponse;
 import com.example.friendmanagement.api.response.GetAllFriendsResponse;
 import com.example.friendmanagement.api.response.GetCommonFriendsResponse;
+import com.example.friendmanagement.error.CreateOneFriendException;
+import com.example.friendmanagement.error.GetAllFriendsException;
+import com.example.friendmanagement.error.GetCommonFriendsException;
 import com.example.friendmanagement.model.FriendEntity;
 import com.example.friendmanagement.repository.FriendRepository;
 import lombok.NonNull;
@@ -16,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,19 +40,12 @@ public class FriendService implements IFriendService {
         return Mono.just(createOneFriendRequest)
                 .filter(request -> Objects.nonNull(request) && Objects.nonNull(request.getFriends()) && request.getFriends().length == 2 && !createOneFriendRequest.getFriends()[0].equals(createOneFriendRequest.getFriends()[1]))
                 .flatMap(request -> {
-                    String email1, email2;
-                    if (request.getFriends()[0].compareTo(request.getFriends()[1]) < 0) {
-                        email1 = request.getFriends()[0];
-                        email2 = request.getFriends()[1];
-                    } else {
-                        email1 = request.getFriends()[1];
-                        email2 = request.getFriends()[0];
-                    }
-                    return friendRepository.save(FriendEntity.builder().email1(email1).email2(email2).build());
+                    if (request.getFriends()[0].compareTo(request.getFriends()[1]) > 0) Collections.swap(Arrays.asList(request.getFriends()), 0, 1);
+                    return friendRepository.save(FriendEntity.builder().email1(request.getFriends()[0]).email2(request.getFriends()[1]).build());
                 })
                 .map(createdFriendEntity -> CreateOneFriendResponse.builder().success(true).build())
-                .doOnError(e -> log.error("can't create one, reason " + e.getCause()))
-                .onErrorMap(e -> new Exception())
+                //.doOnError(e -> log.error("can't create one, reason " + e.getCause()))
+                .onErrorMap(e -> new CreateOneFriendException(e))
                 .onErrorResume(e -> Mono.just(CreateOneFriendResponse.builder().success(false).build()))
                 .switchIfEmpty(Mono.just(CreateOneFriendResponse.builder().success(false).build()));
 
@@ -84,12 +82,10 @@ public class FriendService implements IFriendService {
                     Flux<String> email2Entities = friendRepository.findEmail2ByEmail1(inputEmail);
                     return email1Entities.mergeWith(email2Entities).collectList();
                 })
-//                .flatMap(x -> sleep5(x))
-//                .flatMap(x -> sleep5(x))
-//                .flatMap(x -> sleep5(x))
+                //.flatMap(x -> sleep10(x))
                 .map(outputEmails -> GetAllFriendsResponse.builder().success(true).friends(outputEmails).count(outputEmails.size()).build())
                 .doOnError(e -> log.error("can't get all by email, reason " + e.getCause()))
-                .onErrorMap(e -> new Exception())
+                .onErrorMap(e -> new GetAllFriendsException())
                 .onErrorResume(e -> Mono.just(GetAllFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()))
                 .switchIfEmpty(Mono.just(GetAllFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()));
 
@@ -122,7 +118,7 @@ public class FriendService implements IFriendService {
                 .flatMap(request -> friendRepository.findCommonEmail(request.getFriends()[0], request.getFriends()[1]).collectList())
                 .map(outputEmails -> GetCommonFriendsResponse.builder().success(true).friends(outputEmails).count(outputEmails.size()).build())
                 .doOnError(e -> log.error("can't get common friends, reason " + e.getCause()))
-                .onErrorMap(e -> new Exception())
+                .onErrorMap(e -> new GetCommonFriendsException())
                 .onErrorResume(e -> Mono.just(GetCommonFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()))
                 .switchIfEmpty(Mono.just(GetCommonFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()));
 
@@ -146,10 +142,9 @@ public class FriendService implements IFriendService {
 //        }
 //        return Mono.just(getCommonFriendsResponse);
     }
-
-    public Mono<List<String>> sleep5(List<String> x) {
+    public Mono<List<String>> sleep10(List<String> x) {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (Exception e) {
 
         }
