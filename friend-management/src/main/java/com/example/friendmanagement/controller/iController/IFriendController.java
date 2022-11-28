@@ -1,4 +1,4 @@
-package com.example.friendmanagement.controller;
+package com.example.friendmanagement.controller.iController;
 
 import com.example.friendmanagement.api.request.CreateOneFriendRequest;
 import com.example.friendmanagement.api.request.GetAllFriendsRequest;

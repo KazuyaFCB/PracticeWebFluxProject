@@ -6,10 +6,11 @@ import com.example.friendmanagement.api.request.GetCommonFriendsRequest;
 import com.example.friendmanagement.api.response.CreateOneFriendResponse;
 import com.example.friendmanagement.api.response.GetAllFriendsResponse;
 import com.example.friendmanagement.api.response.GetCommonFriendsResponse;
-import com.example.friendmanagement.error.CreateOneFriendException;
+import com.example.friendmanagement.controller.controllerImpl.FriendControllerImpl;
 import com.example.friendmanagement.model.FriendEntity;
-import com.example.friendmanagement.repository.FriendRepository;
-import com.example.friendmanagement.service.FriendService;
+import com.example.friendmanagement.repository.IBlockerRepository;
+import com.example.friendmanagement.repository.IFriendRepository;
+import com.example.friendmanagement.service.serviceImpl.FriendServiceImpl;
 import com.example.friendmanagement.util.Constant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -26,8 +26,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,11 +33,14 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(controllers = FriendController.class)
-@Import(FriendService.class)
-public class FriendControllerTest implements IFriendControllerTest {
+@WebFluxTest(controllers = FriendControllerImpl.class)
+@Import(FriendServiceImpl.class)
+public class FriendControllerImplTest implements IFriendControllerTest {
     @MockBean
-    FriendRepository friendRepository;
+    IFriendRepository iFriendRepository;
+
+    @MockBean
+    IBlockerRepository iBlockerRepository;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -56,7 +57,7 @@ public class FriendControllerTest implements IFriendControllerTest {
         // simulate repository
         FriendEntity createdFriendEntity = FriendEntity.builder().email1(inputFriends[0]).email2(inputFriends[1]).build();
         Mono<FriendEntity> createdFriendEntityMono = Mono.just(createdFriendEntity);
-        Mockito.when(friendRepository.save(createdFriendEntity)).thenReturn(createdFriendEntityMono);
+        Mockito.when(iFriendRepository.save(createdFriendEntity)).thenReturn(createdFriendEntityMono);
 
         // simulate result
         webTestClient.post()
@@ -67,7 +68,7 @@ public class FriendControllerTest implements IFriendControllerTest {
                 .expectStatus().isCreated()
                 .expectBody(CreateOneFriendResponse.class).isEqualTo(createOneFriendResponse);
 
-        Mockito.verify(friendRepository, times(1)).save(createdFriendEntity);
+        Mockito.verify(iFriendRepository, times(1)).save(createdFriendEntity);
     }
 
     @Test
@@ -168,8 +169,8 @@ public class FriendControllerTest implements IFriendControllerTest {
         // simulate repository
         Flux<String> email1EntitiesFlux = Flux.fromIterable(outputEmailsFromEmail1);
         Flux<String> email2EntitiesFlux = Flux.fromIterable(outputEmailsFromEmail2);
-        Mockito.when(friendRepository.findEmail1ByEmail2(inputEmail)).thenReturn(email1EntitiesFlux);
-        Mockito.when(friendRepository.findEmail2ByEmail1(inputEmail)).thenReturn(email2EntitiesFlux);
+        Mockito.when(iFriendRepository.findEmail1ByEmail2(inputEmail)).thenReturn(email1EntitiesFlux);
+        Mockito.when(iFriendRepository.findEmail2ByEmail1(inputEmail)).thenReturn(email2EntitiesFlux);
 
         // simulate result
         webTestClient.post()
@@ -180,8 +181,8 @@ public class FriendControllerTest implements IFriendControllerTest {
                 .expectStatus().isOk()
                 .expectBody(GetAllFriendsResponse.class).isEqualTo(getAllFriendsResponse);
 
-        Mockito.verify(friendRepository, times(1)).findEmail1ByEmail2(inputEmail);
-        Mockito.verify(friendRepository, times(1)).findEmail2ByEmail1(inputEmail);
+        Mockito.verify(iFriendRepository, times(1)).findEmail1ByEmail2(inputEmail);
+        Mockito.verify(iFriendRepository, times(1)).findEmail2ByEmail1(inputEmail);
     }
 
     @Test
@@ -217,7 +218,7 @@ public class FriendControllerTest implements IFriendControllerTest {
 
         // simulate repository
         Flux<String> outputEmailsFlux = Flux.fromIterable(outputEmails);
-        Mockito.when(friendRepository.findCommonEmail(inputFriends[0], inputFriends[1])).thenReturn(outputEmailsFlux);
+        Mockito.when(iFriendRepository.findCommonEmail(inputFriends[0], inputFriends[1])).thenReturn(outputEmailsFlux);
 
         // simulate result
         webTestClient.post()
@@ -228,7 +229,7 @@ public class FriendControllerTest implements IFriendControllerTest {
                 .expectStatus().isOk()
                 .expectBody(GetCommonFriendsResponse.class).isEqualTo(getCommonFriendsResponse);
 
-        Mockito.verify(friendRepository, times(1)).findCommonEmail(inputFriends[0], inputFriends[1]);
+        Mockito.verify(iFriendRepository, times(1)).findCommonEmail(inputFriends[0], inputFriends[1]);
     }
 
     @Test

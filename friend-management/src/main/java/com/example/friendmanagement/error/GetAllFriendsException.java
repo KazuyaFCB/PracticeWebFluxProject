@@ -1,11 +1,9 @@
 package com.example.friendmanagement.error;
 
-import com.example.friendmanagement.api.response.GetAllFriendsResponse;
-import reactor.core.publisher.Mono;
+public class GetAllFriendsException extends RuntimeException {
+    private Throwable throwable;
 
-import java.util.Collections;
-
-public class GetAllFriendsException extends Exception {
-    public GetAllFriendsException() {
+    public GetAllFriendsException(Throwable throwable) {
+        this.throwable = throwable;
     }
 }

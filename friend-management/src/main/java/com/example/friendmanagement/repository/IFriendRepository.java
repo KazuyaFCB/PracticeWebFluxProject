@@ -6,12 +6,12 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Flux;
 
 
-public interface FriendRepository extends R2dbcRepository<FriendEntity, Long> {
+public interface IFriendRepository extends R2dbcRepository<FriendEntity, Long> {
     @Query("SELECT email2 FROM friend_management.friend f WHERE f.email1 = :email1")
-    public Flux<String> findEmail2ByEmail1(String email1);
+    Flux<String> findEmail2ByEmail1(String email1);
 
     @Query("SELECT email1 FROM friend_management.friend f WHERE f.email2 = :email2")
-    public Flux<String> findEmail1ByEmail2(String email2);
+    Flux<String> findEmail1ByEmail2(String email2);
 
     @Query( "SELECT email\n" +
             "FROM ( \n" +
@@ -21,6 +21,6 @@ public interface FriendRepository extends R2dbcRepository<FriendEntity, Long> {
             ") t\n" +
             "GROUP BY email\n" +
             "HAVING COUNT(email) > 1")
-    public Flux<String> findCommonEmail(String email1, String email2);
+    Flux<String> findCommonEmail(String email1, String email2);
 
 }

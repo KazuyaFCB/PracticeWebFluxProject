@@ -1,4 +1,4 @@
-package com.example.friendmanagement.service;
+package com.example.friendmanagement.service.iService;
 
 import com.example.friendmanagement.api.request.CreateOneFriendRequest;
 import com.example.friendmanagement.api.request.GetAllFriendsRequest;
