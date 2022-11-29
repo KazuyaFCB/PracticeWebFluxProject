@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS friend_management.friend (
 );
 
 CREATE UNIQUE INDEX email1_email2_unique_idx ON friend_management.friend (email1, email2);
+(1,2), (1,2)
 
 CREATE TABLE IF NOT EXISTS friend_management.subscriber (
   id SERIAL PRIMARY KEY,
