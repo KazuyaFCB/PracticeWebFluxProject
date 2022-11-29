@@ -1,13 +1,12 @@
 package com.example.friendmanagement.model;
 
+import com.example.friendmanagement.common.BaseModel;
+import com.example.friendmanagement.util.Constant;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -16,13 +15,8 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "blocker", schema = "friend_management")
-public class BlockerEntity {
-    @Id
-    @Column("id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
-
+@Table(name = Constant.BLOCKER, schema = Constant.FRIEND_MANAGEMENT)
+public class BlockerEntity extends BaseModel {
     @Column("requestor")
     private String requestor;
 

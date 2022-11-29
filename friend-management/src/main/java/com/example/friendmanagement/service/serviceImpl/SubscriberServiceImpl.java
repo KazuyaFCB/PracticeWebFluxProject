@@ -25,7 +25,6 @@ public class SubscriberServiceImpl implements ISubscriberService {
                 .switchIfEmpty(Mono.error(new CreateOneSubscriberException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iSubscriberRepository.save(SubscriberEntity.builder().requestor(request.getRequestor()).target(request.getTarget()).build()))
                 .map(createdSubscriberEntity -> CreateOneSubscriberResponse.builder().success(true).build())
-                .onErrorMap(e -> new CreateOneSubscriberException(e.getCause()))
-                .onErrorResume(e -> Mono.just(CreateOneSubscriberResponse.builder().success(false).build()));
+                .onErrorMap(e -> new CreateOneSubscriberException(e.getCause()));
     }
 }

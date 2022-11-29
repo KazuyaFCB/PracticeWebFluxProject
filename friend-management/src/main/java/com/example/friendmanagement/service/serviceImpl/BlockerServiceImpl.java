@@ -26,7 +26,6 @@ public class BlockerServiceImpl implements IBlockerService {
                 .switchIfEmpty(Mono.error(new CreateOneFriendException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iBlockerRepository.save(BlockerEntity.builder().requestor(request.getRequestor()).target(request.getTarget()).build()))
                 .map(createdBlockerEntity -> CreateOneBlockerResponse.builder().success(true).build())
-                .onErrorMap(e -> new CreateOneBlockerException(e.getCause()))
-                .onErrorResume(e -> Mono.just(CreateOneBlockerResponse.builder().success(false).build()));
+                .onErrorMap(e -> new CreateOneBlockerException(e.getCause()));
     }
 }

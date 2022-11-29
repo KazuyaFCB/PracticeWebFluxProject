@@ -15,7 +15,6 @@ import com.example.friendmanagement.repository.IFriendRepository;
 import com.example.friendmanagement.service.iService.IFriendService;
 import com.example.friendmanagement.util.Constant;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,11 +23,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @Service
-@Slf4j
 public class FriendServiceImpl implements IFriendService {
     @Autowired
     private IFriendRepository iFriendRepository;
@@ -53,8 +50,8 @@ public class FriendServiceImpl implements IFriendService {
                 })
                 .map(createdFriendEntity -> CreateOneFriendResponse.builder().success(true).build())
                 //.doOnError(e -> log.error("can't create one, reason " + e.getCause()))
-                .onErrorMap(e -> new CreateOneFriendException(e.getCause()))
-                .onErrorResume(e -> Mono.just(CreateOneFriendResponse.builder().success(false).build()));
+                .onErrorMap(e -> new CreateOneFriendException(e.getCause()));
+                //.onErrorResume(e -> Mono.just(CreateOneFriendResponse.builder().success(false).build()));
     }
 
     @Override
@@ -68,8 +65,7 @@ public class FriendServiceImpl implements IFriendService {
                     Flux<String> email2Entities = iFriendRepository.findEmail2ByEmail1(inputEmail);
                     return email1Entities.mergeWith(email2Entities).collectList();
                 })
-                .map(outputEmails -> GetAllFriendsResponse.builder().success(true).friends(outputEmails).count(outputEmails.size()).build())
-                .onErrorResume(e -> Mono.just(GetAllFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()));
+                .map(outputEmails -> GetAllFriendsResponse.builder().success(true).friends(outputEmails).count(outputEmails.size()).build());
     }
 
     @Override
@@ -79,8 +75,6 @@ public class FriendServiceImpl implements IFriendService {
                 .switchIfEmpty(Mono.error(new GetCommonFriendsException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iFriendRepository.findCommonEmail(request.getFriends()[0], request.getFriends()[1]).collectList())
                 .map(outputEmails -> GetCommonFriendsResponse.builder().success(true).friends(outputEmails).count(outputEmails.size()).build())
-                .onErrorMap(e -> new GetCommonFriendsException(e.getCause()))
-                .onErrorResume(e -> Mono.just(GetCommonFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()))
-                .switchIfEmpty(Mono.just(GetCommonFriendsResponse.builder().success(false).friends(Collections.emptyList()).count(0).build()));
+                .onErrorMap(e -> new GetCommonFriendsException(e.getCause()));
     }
 }

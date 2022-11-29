@@ -7,10 +7,10 @@ import reactor.core.publisher.Flux;
 
 
 public interface IFriendRepository extends R2dbcRepository<FriendEntity, Long> {
-    @Query("SELECT email2 FROM friend_management.friend f WHERE f.email1 = :email1")
+    @Query("SELECT email2 FROM friend_management.friend WHERE email1 = :email1")
     Flux<String> findEmail2ByEmail1(String email1);
 
-    @Query("SELECT email1 FROM friend_management.friend f WHERE f.email2 = :email2")
+    @Query("SELECT email1 FROM friend_management.friend WHERE email2 = :email2")
     Flux<String> findEmail1ByEmail2(String email2);
 
     @Query( "SELECT email\n" +

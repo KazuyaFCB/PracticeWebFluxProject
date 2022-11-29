@@ -10,14 +10,12 @@ import com.example.friendmanagement.controller.iController.IFriendController;
 import com.example.friendmanagement.service.serviceImpl.FriendServiceImpl;
 import com.example.friendmanagement.util.Constant;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@Slf4j
 @RequestMapping(value = Constant.API_FRIEND)
 public class FriendControllerImpl implements IFriendController {
     @Autowired

@@ -1,9 +1,14 @@
 package com.example.friendmanagement.error;
 
-public class GetAllNotifiedEmailsException extends RuntimeException {
-    private Throwable throwable;
+import lombok.Getter;
+import lombok.Setter;
 
-    public GetAllNotifiedEmailsException(Throwable throwable) {
-        this.throwable = throwable;
+@Getter
+@Setter
+public class GetAllNotifiedEmailsException extends RuntimeException {
+    private Throwable cause;
+
+    public GetAllNotifiedEmailsException(Throwable cause) {
+        this.cause = cause;
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -42,9 +41,7 @@ public class NotificationServiceImpl implements INotificationService {
                 .switchIfEmpty(Mono.error(new GetAllFriendsException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> getNotifiedEmailListFromOneEmail(request.getSender(), request.getText()))
                 .map(outputEmails -> GetAllNotifiedEmailsResponse.builder().success(true).recipients(outputEmails).build())
-                .onErrorMap(e -> new GetAllNotifiedEmailsException(e.getCause()))
-                .onErrorResume(e -> Mono.just(GetAllNotifiedEmailsResponse.builder().success(false).recipients(Collections.emptyList()).build()))
-                .switchIfEmpty(Mono.just(GetAllNotifiedEmailsResponse.builder().success(false).recipients(Collections.emptyList()).build()));
+                .onErrorMap(e -> new GetAllNotifiedEmailsException(e.getCause()));
     }
 
     private Mono<List<String>> getNotifiedEmailListFromOneEmail(String inputEmail, String text) {

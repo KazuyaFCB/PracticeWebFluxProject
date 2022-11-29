@@ -1,9 +1,14 @@
 package com.example.friendmanagement.error;
 
-public class GetCommonFriendsException extends RuntimeException {
-    private Throwable throwable;
+import lombok.Getter;
+import lombok.Setter;
 
-    public GetCommonFriendsException(Throwable throwable) {
-        this.throwable = throwable;
+@Getter
+@Setter
+public class GetCommonFriendsException extends RuntimeException {
+    private Throwable cause;
+
+    public GetCommonFriendsException(Throwable cause) {
+        this.cause = cause;
     }
 }
