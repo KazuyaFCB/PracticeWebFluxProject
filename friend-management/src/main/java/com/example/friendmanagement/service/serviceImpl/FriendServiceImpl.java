@@ -14,10 +14,8 @@ import com.example.friendmanagement.repository.IBlockerRepository;
 import com.example.friendmanagement.repository.IFriendRepository;
 import com.example.friendmanagement.service.iService.IFriendService;
 import com.example.friendmanagement.util.Constant;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -35,7 +33,7 @@ public class FriendServiceImpl implements IFriendService {
 
     @Override
     public Mono<CreateOneFriendResponse> createOneFriend(CreateOneFriendRequest createOneFriendRequest) {
-        return Mono.just(createOneFriendRequest)
+        return Mono.justOrEmpty(createOneFriendRequest)
                 .filter(request -> Objects.nonNull(request) && Objects.nonNull(request.getFriends()) && request.getFriends().length == 2 && !createOneFriendRequest.getFriends()[0].equals(createOneFriendRequest.getFriends()[1]))
                 .switchIfEmpty(Mono.error(new CreateOneFriendException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iBlockerRepository.countEmailBlockEachOther(request.getFriends()[0], request.getFriends()[1])
@@ -55,8 +53,8 @@ public class FriendServiceImpl implements IFriendService {
     }
 
     @Override
-    public Mono<GetAllFriendsResponse> getAllFriendsByEmail(@RequestBody @NonNull GetAllFriendsRequest getAllFriendsRequest) {
-        return Mono.just(getAllFriendsRequest)
+    public Mono<GetAllFriendsResponse> getAllFriendsByEmail(GetAllFriendsRequest getAllFriendsRequest) {
+        return Mono.justOrEmpty(getAllFriendsRequest)
                 .filter(request -> Objects.nonNull(request) && Objects.nonNull(request.getEmail()))
                 .switchIfEmpty(Mono.error(new GetAllFriendsException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .map(GetAllFriendsRequest::getEmail)
@@ -70,7 +68,7 @@ public class FriendServiceImpl implements IFriendService {
 
     @Override
     public Mono<GetCommonFriendsResponse> getCommonFriends(GetCommonFriendsRequest getCommonFriendsRequest) {
-        return Mono.just(getCommonFriendsRequest)
+        return Mono.justOrEmpty(getCommonFriendsRequest)
                 .filter(request -> Objects.nonNull(request) && Objects.nonNull(request.getFriends()) && request.getFriends().length == 2)
                 .switchIfEmpty(Mono.error(new GetCommonFriendsException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iFriendRepository.findCommonEmail(request.getFriends()[0], request.getFriends()[1]).collectList())

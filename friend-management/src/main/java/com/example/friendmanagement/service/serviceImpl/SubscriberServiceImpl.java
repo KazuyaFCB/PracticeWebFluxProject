@@ -20,7 +20,7 @@ public class SubscriberServiceImpl implements ISubscriberService {
 
     @Override
     public Mono<CreateOneSubscriberResponse> createOneSubscriber(CreateOneSubscriberRequest createOneSubscriberRequest) {
-        return Mono.just(createOneSubscriberRequest)
+        return Mono.justOrEmpty(createOneSubscriberRequest)
                 .filter(request -> Objects.nonNull(request) && Objects.nonNull(request.getRequestor()) && Objects.nonNull(request.getTarget()))
                 .switchIfEmpty(Mono.error(new CreateOneSubscriberException(new Throwable(Constant.REQUEST_BODY_IS_INVALID))))
                 .flatMap(request -> iSubscriberRepository.save(SubscriberEntity.builder().requestor(request.getRequestor()).target(request.getTarget()).build()))
