@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "93f0cfda-9a01-4b6a-b35e-6e4bb05cc925",
+		"name": "FriendManagement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateOneFriend",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"friends\": [\"u1\", \"u2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/friend/create-one",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"friend",
+						"create-one"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllFriendByEmail",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"u2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/friend/get-all-by-email",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"friend",
+						"get-all-by-email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCommonFriend",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"friends\": [\"u1\", \"u2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/friend/get-common-friends",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"friend",
+						"get-common-friends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateOneSubscriber",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestor\": \"u2\", \n    \"target\": \"u1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/subscriber/create-one",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"subscriber",
+						"create-one"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateOneBlocker",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestor\": \"u1\", \n    \"target\": \"u2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/blocker/create-one",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"blocker",
+						"create-one"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllNotifiedEmails",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sender\": \"u1\", \n    \"text\": \"Hello World! kate@example.com andy@example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/notification/get-all-notified-emails",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"notification",
+						"get-all-notified-emails"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
