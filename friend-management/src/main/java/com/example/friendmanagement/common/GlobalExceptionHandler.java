@@ -1,6 +1,5 @@
 package com.example.friendmanagement.common;
 
-import com.example.friendmanagement.error.CreateOneFriendException;
 import com.example.friendmanagement.error.UnitTestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -11,8 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.server.ServerWebExchange;
+//import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Objects;
 
@@ -24,17 +24,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String TRACE = "trace";
 
-    @ExceptionHandler(CreateOneFriendException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleAllUncaughtException(CreateOneFriendException exception, WebRequest request) {
-        log.error("Exception message: {}", exception.getCause().getMessage());
-        return buildErrorResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, request);
-    }
-
     @ExceptionHandler(UnitTestException.class)
     public ResponseEntity<ErrorResponse> handleUnitTestException(UnitTestException exception, ServerWebExchange exchange) {
         log.error("Exception message: {}", exception.getCause().getMessage());
         return buildErrorResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorResponse> handleAllUncaughtException(RuntimeException exception, WebRequest request) {
+        log.error("Exception message: {}", exception.getCause().getMessage());
+        return buildErrorResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(Exception exception, HttpStatus httpStatus, WebRequest request) {

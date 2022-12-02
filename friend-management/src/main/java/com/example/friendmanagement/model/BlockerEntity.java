@@ -2,13 +2,14 @@ package com.example.friendmanagement.model;
 
 import com.example.friendmanagement.common.BaseModel;
 import com.example.friendmanagement.util.Constant;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
+import javax.persistence.Entity;
 
 @Data
 @Builder
