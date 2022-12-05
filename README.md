@@ -9,6 +9,7 @@
 - Spring Boot 2.7.6
 - PostgreSQL
 - Maven
+- Docker
 - Postman
 
 ## REST API Specification
@@ -16,14 +17,16 @@ Please access link: https://rawcdn.githack.com/KazuyaFCB/PracticeWebFluxProject/
 
 ## How to run project
 - Clone from git
-```git clone https://github.com/KazuyaFCB/PracticeWebFluxProject.git```
+```
+git clone https://github.com/KazuyaFCB/PracticeWebFluxProject.git
+```
 - Build maven and export JAR file
 ```
 cd PracticeWebFluxProject/friend_management
 mvn package
 ```
-- Run JAR file
+- Run Docker 
 ```
-cd target
-java -jar friend-management-0.0.1-SNAPSHOT.jar
+docker-compose down
+docker-compose up
 ```
