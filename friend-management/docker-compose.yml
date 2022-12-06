@@ -1,0 +1,38 @@
+version: '1'
+
+services:
+  friend_management_app:
+    image: 'friend_management_app:latest'
+    ports:
+      - "8080:8080"
+    container_name: friend_management_app
+    environment:
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgresdb:5432/postgres
+      - SPRING_R2DBC_USERNAME=postgres
+      - SPRING_R2DBC_PASSWORD=secret
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_R2DBC_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SERVER_ERROR_INCLUDE_BINDING_ERRORS=always
+      - SERVER_ERROR_INCLUDE_EXCEPTION=true
+      - SERVER_ERROR_INCLUDE_MESSAGE=on_param
+      - SERVER_ERROR_INCLUDE_STACKTRACE=on_param
+      - EXCEPTION_TRACE=true
+      - SPRING_MVC_THROW_EXCEPTION_IF_NO_HANDLER_FOUND=true
+      - SPRING_WEB_RESOURCES_ADD_MAPPINGS=false
+      - SPRINGDOC_SWAGGER_UI_PATH=/index.html
+      - SPRINGDOC_API_DOCS_PATH=/api-docs
+    build:
+      context: .
+    depends_on:
+      - postgresdb
+          
+  postgresdb:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - "5432:5432"
+    container_name: postgresdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./src/main/resources/sql-source.sql:/docker-entrypoint-initdb.d/init.sql

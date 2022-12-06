@@ -1,0 +1,448 @@
+<html>
+    <head>
+        <!-- Load the latest Swagger UI code and style from npm using unpkg.com -->
+        <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css"/>
+        <title>My New API</title>
+    </head>
+    <body>
+        <div id="swagger-ui"></div> <!-- Div to hold the UI component -->
+        <script>
+            const swaggerJson = {
+                "openapi": "3.0.1",
+                "info": {
+                    "title": "OpenAPI definition",
+                    "version": "v0"
+                },
+                "servers": [
+                    {
+                        "url": "http://localhost:8080",
+                        "description": "Generated server url"
+                    }
+                ],
+                "paths": {
+                    "/api/subscriber/create-one": {
+                        "post": {
+                            "tags": [
+                                "subscriber-controller-impl"
+                            ],
+                            "summary": "Create subscriber connection",
+                            "operationId": "createOneSubscriber",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/CreateOneSubscriberRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Created subscriber connection failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "201": {
+                                    "description": "Created subscriber connection successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/CreateOneSubscriberResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "/api/notification/get-all-notified-emails": {
+                        "post": {
+                            "tags": [
+                                "notification-controller-impl"
+                            ],
+                            "summary": "Get all notified email list",
+                            "operationId": "getAllNotifiedEmails",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/GetAllNotifiedEmailsRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Got all notified email list failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "200": {
+                                    "description": "Got all notified email list successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/GetAllNotifiedEmailsResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "/api/friend/get-common-friends": {
+                        "post": {
+                            "tags": [
+                                "friend-controller-impl"
+                            ],
+                            "summary": "Get common friend list",
+                            "operationId": "getCommonFriends",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/GetCommonFriendsRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Get common friend list failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "200": {
+                                    "description": "Get common friend list successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/GetCommonFriendsResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "/api/friend/get-all-by-email": {
+                        "post": {
+                            "tags": [
+                                "friend-controller-impl"
+                            ],
+                            "summary": "Get friend list",
+                            "operationId": "getAllFriendsByEmail",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/GetAllFriendsRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Got friend list failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "200": {
+                                    "description": "Got friend list successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/GetAllFriendsResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "/api/friend/create-one": {
+                        "post": {
+                            "tags": [
+                                "friend-controller-impl"
+                            ],
+                            "summary": "Create friend connection",
+                            "operationId": "createOneFriend",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/CreateOneFriendRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Created friend connection failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "201": {
+                                    "description": "Created friend connection successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/CreateOneFriendResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "/api/blocker/create-one": {
+                        "post": {
+                            "tags": [
+                                "blocker-controller-impl"
+                            ],
+                            "summary": "Create blocker connection",
+                            "operationId": "createOneBlocker",
+                            "requestBody": {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/CreateOneBlockerRequest"
+                                        }
+                                    }
+                                },
+                                "required": true
+                            },
+                            "responses": {
+                                "500": {
+                                    "description": "Created blocker connection failed",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/ErrorResponse"
+                                            }
+                                        }
+                                    }
+                                },
+                                "201": {
+                                    "description": "Created blocker connection successfully",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/CreateOneBlockerResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "components": {
+                    "schemas": {
+                        "ErrorResponse": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "stackTrace": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "CreateOneSubscriberRequest": {
+                            "type": "object",
+                            "properties": {
+                                "requestor": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "CreateOneSubscriberResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "GetAllNotifiedEmailsRequest": {
+                            "type": "object",
+                            "properties": {
+                                "sender": {
+                                    "type": "string"
+                                },
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "GetAllNotifiedEmailsResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "recipients": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "GetCommonFriendsRequest": {
+                            "type": "object",
+                            "properties": {
+                                "friends": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "GetCommonFriendsResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "friends": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "count": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                }
+                            }
+                        },
+                        "GetAllFriendsRequest": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "GetAllFriendsResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "friends": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "count": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                }
+                            }
+                        },
+                        "CreateOneFriendRequest": {
+                            "type": "object",
+                            "properties": {
+                                "friends": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "CreateOneFriendResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "CreateOneBlockerRequest": {
+                            "type": "object",
+                            "properties": {
+                                "requestor": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "CreateOneBlockerResponse": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            window.onload = function () {
+                // Begin Swagger UI call region
+                const ui = SwaggerUIBundle({
+                    //url: 'swagger.json',
+                    spec: swaggerJson,
+                    dom_id: '#swagger-ui',
+                    deepLinking: true,
+                    presets: [
+                        SwaggerUIBundle.presets.apis,
+                        SwaggerUIBundle.SwaggerUIStandalonePreset
+                    ],
+                    plugins: [
+                        SwaggerUIBundle.plugins.DownloadUrl
+                    ],
+                });
+                window.ui = ui;
+            }
+        </script>
+    </body>
+</html>
